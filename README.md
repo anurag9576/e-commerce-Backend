@@ -11,26 +11,7 @@ A Node.js/Express backend with MongoDB for user authentication using JWT tokens.
 - Password Hashing with bcryptjs
 - MongoDB Database Integration
 
-## Project Structure
 
-```
-├── src/
-│   ├── config/
-│   │   └── db.js                # MongoDB connection
-│   ├── models/
-│   │   └── User.js              # User schema
-│   ├── controllers/
-│   │   └── authController.js    # Login & Register logic
-│   ├── routes/
-│   │   └── authRoutes.js        # Auth APIs
-│   ├── middleware/
-│   │   └── authMiddleware.js    # JWT verify
-│   ├── app.js                   # Express app setup
-│   └── server.js                # Server start
-├── .env                         # Environment variables
-├── package.json
-└── README.md
-```
 
 ## Installation
 
