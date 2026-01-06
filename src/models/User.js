@@ -33,22 +33,21 @@ const userSchema = new mongoose.Schema({
 });
 
 // Hash password before saving
-userSchema.pre('save', function(next) {
+userSchema.pre('save', async function() {
+  
   if (!this.isModified('password')) {
-    return next();
+   
+    return;
   }
   
-  bcrypt.genSalt(10)
-    .then(salt => {
-      return bcrypt.hash(this.password, salt);
-    })
-    .then(hash => {
-      this.password = hash;
-      next();
-    })
-    .catch(error => {
-      return next(error);
-    });
+  try {
+   
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(this.password, salt);
+    this.password = hash;
+  } catch (error) {
+    throw error;
+  }
 });
 
 // Compare password method

@@ -39,7 +39,7 @@ const register = async (req, res) => {
       });
     }
 
-    // Create new user
+    
     const user = await User.create({
       name,
       email,
@@ -47,6 +47,9 @@ const register = async (req, res) => {
       password
     });
 
+    // Verify password was hashed correctly
+    const createdUser = await User.findById(user._id).select('+password');
+    
     // Generate token
     const token = generateToken(user._id);
 
@@ -88,6 +91,11 @@ const login = async (req, res) => {
     // Find user by email
     const user = await User.findOne({ email }).select('+password');
 
+    console.log('Login attempt for email:', email);
+    console.log('User found:', !!user);
+    console.log('Stored password:', user.password);
+    console.log('Password is hashed:', user.password.startsWith('$2'));
+
     if (!user) {
       return res.status(401).json({
         success: false,
@@ -97,6 +105,7 @@ const login = async (req, res) => {
 
     // Check password
     const isPasswordValid = await user.comparePassword(password);
+    console.log('Password valid:', isPasswordValid);
 
     if (!isPasswordValid) {
       return res.status(401).json({
