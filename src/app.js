@@ -14,17 +14,19 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 
 // Middleware
-app.use(helmet()); // Security headers
-app.use(cors({
-  origin: '*',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
- // Enable CORS
-app.use(morgan('dev')); // HTTP request logger
 app.use(express.json({ limit: '10mb' })); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://localhost:5500', 'http://127.0.0.1:5500', '*'],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  preflightContinue: false
+}));
+app.use(morgan('dev')); // HTTP request logger
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+})); // Security headers
 
 // Routes
 app.use('/api/auth', authRoutes);
